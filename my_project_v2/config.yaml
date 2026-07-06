@@ -1,0 +1,84 @@
+# ==================== 机械臂 ====================
+home: [0.0, 100.0, 120.0]       # 初始归位坐标 (X, Y, Z) mm
+grasp_z: 8.0                    # 抓取高度 mm
+grasp_z_down: 5.0                # 二次下压高度 mm
+lift_z: 140.0                    # 抓取后抬升高度 mm
+release_z: 25.0                  # 释放时降低到的高度 m
+
+# ==================== 扫描 ====================
+scan_x: [-50.0, 50.0]    # 左右范围收紧
+scan_y: [80.0, 160.0]    # 下方起点提高，避开盒子Y坐标
+scan_step: 30.0                  # 扫描步长 mm
+scan_z: 100.0                     # 扫描高度 mm
+scan_speed: 400                  # 每步移动耗时 ms
+scan_settle: 300                 # 到位稳定时间 ms
+
+# ==================== 视觉伺服 ====================
+gain_x: 0.025                     # 像素偏差 → X轴位移 比例系数
+gain_y: 0.025                     # 像素偏差 → Y轴位移 比例系数
+dead_zone: 15                    # 像素死区
+cooldown_ms: 50                 # 两次移动最小间隔 ms
+align_count: 3                   # 连续对准次数
+max_move_step: 5.0               # 单次最大移动量 mm (防猛冲)
+x_min: -200.0                    # X轴安全下限 mm
+x_max: 200.0                     # X轴安全上限 mm
+y_min: 0.0                      # Y轴安全下限 mm
+y_max: 300.0                     # Y轴安全上限 mm
+
+# ==================== 摄像头偏移 ====================
+offset_x: 45
+offset_y: 270
+
+# 笔的额外Y轴补偿（抓取阶段用，伺服阶段需另外在代码中处理）
+pen_y_offset: 100
+pen_servo_retract: 0
+# ==================== 模型 ====================
+model_path: "best_k1.q.onnx"
+input_size: 320
+conf_thresh: 0.6
+classes: ["pen", "eraser", "paper_trash","car"]
+graspable_ids: [0, 1, 2 ,3]
+basket_ids: []
+
+# ==================== 盒子定位 (ArUco) ====================
+marker_blue: 1
+marker_orange: 2
+
+# ==================== 爪子旋转 ====================
+wrist_mid: 1537
+wrist_coeff: 7.67
+wrist_dir: -1
+
+# ==================== 串口 ====================
+port_win: "COM9"
+port_linux: "/dev/ttyUSB0"
+baudrate: 115200
+camera_win: 1
+camera_linux: 20
+
+# ==================== 抓取策略 ====================
+# 各类别的抓取补偿 (mm)，只对笔加补偿，其他为0
+grasp_compensations:
+  0: 5      # 笔：往前伸5mm（可根据实际微调）
+  1: 10     # 橡皮擦：10mm（根据实际）
+  2: 10     # 纸团：10mm
+
+# ==================== 多物体锁定策略 ====================
+lock_strategy: "nearest"
+lock_distance_threshold: 60
+
+# ==================== 盒子定位策略 ====================
+box_scan_forward_dist: 50.0
+box_select_strategy: "min_deviation"
+
+# ==================== 抓取后确认 ====================
+grasp_verify_enabled: false
+grasp_verify_method: "camera"
+
+# ==================== 调试选项 ====================
+debug_show_servo: false
+debug_print_boxes: true
+
+
+
+
